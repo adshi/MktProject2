@@ -20,7 +20,7 @@ desFull$associations = association[desFull$f2]
 desFull$names = names[desFull$f3]
 desFull$genders = gender[desFull$f4]
 
-desFull[, c(5, 6, 7, 8)]
+write_csv(desFull[, c(5, 6, 7, 8)], 'withgender.csv')
 
 ############################## fractional factorial with gender ###############################
 # now with interaction between gender and everything else
@@ -45,33 +45,6 @@ desFull$benefits = benefits[desFull$f1]
 desFull$associations = association[desFull$f2]
 desFull$names = names[desFull$f3]
 
-desFull[, c(3, 4, 5)]
-
-############################## 
-# Now draw randomly a “half” random fractional factorial design
-sampl = sample.int(n=36,size=18,replace=TRUE)
-desHalf = desFull[sampl,]
-print(desHalf)
-res1b=lm(y[sampl]~factor(benefits) + factor(association) + factor(gender) + factor(name), data=desHalf)
-print(summary(res1b))
-
-# Now take a random draw of conditions, still 36 observations, but some conditions will be double counted (loss of information)
-sampl = sample.int(n=36,size=36,replace=TRUE)
-desRandom = desFull[sampl,]
-print(desRandom)
-
-# compute some optimal fractional factorial designs with no interaction
-formulaMainEffects1 = ~ benefits + association + gender + name
-desConjointFract1 = AlgDesign::optFederov(formulaMainEffects1, data=desFull, nTrials=24)
-print(desConjointFract1)
-eval.design(formulaMainEffects1,desConjointFract1$design)
-
-# now with interaction between gender and everything else
-formulaIntEffects3 = ~ benefits + association + gender + name + gender*benefits + gender*association + gender*name
-desConjointFract3<- optFederov(formulaIntEffects3,data=desFull,nTrials=24)
-print(desConjointFract3)
-eval.design(formulaIntEffects3,desConjointFract3$design)
-
-sum(desConjointFract3$rows == desConjointFract1$rows)
+write_csv(desFull[, c(4, 5, 6)], 'nogender.csv')
 ```
 
